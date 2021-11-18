@@ -1,13 +1,16 @@
 import express from 'express';
+import config from './config/config';
+import serviciosRoutes from './routes/servicios';
 
 const app = express();
-const port = 3000;
+
+// parseo para el body
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Respuesta del servidor
-app.get('/', (req, res) => {
-    res.send('prueba del servidor');
-});
+serviciosRoutes(app);
 
-app.listen(port, () => {
-    return console.log(`servidor corriendo sobre el uerto ${port}`)
+app.listen(config.PORT, () => {
+    return console.log(`servidor corriendo sobre el puerto ${config.PORT}`)
 })
