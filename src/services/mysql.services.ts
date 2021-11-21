@@ -33,7 +33,7 @@ const executeQuery = (query: string): Promise<any> => {
         else{
           resolve(result);
         }
-        connection.end();
+        // connection.end();
       })
     }catch(error){
       console.log(error);

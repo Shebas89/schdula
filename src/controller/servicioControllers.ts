@@ -15,7 +15,7 @@ const obtenerServicios = async(req, res) => {
 
 const obtenerServicio = async(req, res) => {
   const {id} = req.params;
-  const response = await executeQuery(`select * from servicios where id = ${id}`);
+  const response = await executeQuery(`select * from servicios where id_servicio = ${id}`);
   try{
     const data = {
       message: `${response.length} dato encontrado`,
@@ -29,9 +29,9 @@ const obtenerServicio = async(req, res) => {
 
 const actualizarServicio = async(req, res) => {
   const {id} = req.params;
-  const {nombre, descripcion, categoria, duracion, precio, id_negocio, id_empleado} = req.body;
+  const {nombre, descripcion, categoria, duracion, precio, id_empresa, id_usuario} = req.body;
   try{
-    const response = await executeQuery(`update servicios set nombre = '${nombre}', descripcion = '${descripcion}', categoria = '${categoria}', duracion = ${duracion}, precio = ${precio}, id_negocio = ${id_negocio}, id_empleado = ${id_empleado} where id = ${id}`);
+    const response = await executeQuery(`update servicios set nombre_servicio = '${nombre}', descripcion_servicio = '${descripcion}', categoria_servicio = '${categoria}', duracion = ${duracion}, precio = ${precio}, id_empresa = ${id_empresa}, id_usuario = ${id_usuario} where id_servicio = ${id}`);
     console.log(response);
     if(response.affectedRows > 0)
       res.json({message: 'updated'});
@@ -43,9 +43,9 @@ const actualizarServicio = async(req, res) => {
 }
 
 const agregarServicio = async(req, res) => {
-  const {nombre, descripcion, categoria, duracion, precio, id_negocio, id_empleado} = req.body;
+  const {nombre, descripcion, categoria, duracion, precio, id_empresa, id_usuario} = req.body;
   try{
-    const response = await executeQuery(`insert into servicios (nombre, descripcion, categoria, duracion, precio, id_negocio, id_empleado) VALUES ('${nombre}', '${descripcion}', '${categoria}', ${duracion}, ${precio}, ${id_negocio}, ${id_empleado})`);
+    const response = await executeQuery(`insert into servicios (nombre_servicio, descripcion_servicio, categoria_servicio, duracion, precio, id_empresa, id_usuario) VALUES ('${nombre}', '${descripcion}', '${categoria}', ${duracion}, ${precio}, ${id_empresa}, ${id_usuario})`);
     console.log(response);
     res.status(201).json({message: 'Created'});
   }catch(error){
@@ -56,7 +56,7 @@ const agregarServicio = async(req, res) => {
 const eliminarServicio = async(req, res) => {
   const {id} = req.params;
   try{
-    const response = await executeQuery(`delete from servicios where id = ${id}`);
+    const response = await executeQuery(`delete from servicios where id_servicio = ${id}`);
     console.log(response);
     if(response.affectedRows > 0)
       res.json({message: 'deleted'});
