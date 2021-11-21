@@ -33,7 +33,7 @@ CREATE TABLE `empresas` (
   UNIQUE KEY `id_empresa_UNIQUE` (`id_empresa`),
   KEY `id_usuario_idx` (`id_usuario`),
   CONSTRAINT `Fk_id_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id_usuario`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin CCOMMENT='Negocios en la aplicación SCHEDULA';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='Negocios en la aplicación SCHEDULA';
 
 -- `db-schedula`.servicios definition
 

@@ -1,5 +1,6 @@
 import express from 'express';
 import config from './config/config';
+import errorHandler from './middlewares/error';
 import serviciosRoutes from './routes/servicios';
 
 const app = express();
@@ -10,6 +11,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Respuesta del servidor
 serviciosRoutes(app);
+
+app.use(errorHandler);
 
 app.listen(config.PORT, () => {
     return console.log(`servidor corriendo sobre el puerto ${config.PORT}`)

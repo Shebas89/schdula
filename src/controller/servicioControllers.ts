@@ -1,6 +1,6 @@
 import executeQuery from "../services/mysql.services";
 
-const obtenerServicios = async(req, res) => {
+const obtenerServicios = async(req, res, next) => {
   try{
     const response = await executeQuery('select * from servicios');
     const data = {
@@ -9,25 +9,25 @@ const obtenerServicios = async(req, res) => {
     }
     res.json(data);
   }catch(error){
-    res.status(500).send(error);
+    next(error);
   };
 }
 
-const obtenerServicio = async(req, res) => {
+const obtenerServicio = async(req, res, next) => {
   const {id} = req.params;
-  const response = await executeQuery(`select * from servicios where id_servicio = ${id}`);
   try{
+    const response = await executeQuery(`select * from servicios where id_servicio = ${id}`); 
     const data = {
       message: `${response.length} dato encontrado`,
       datos: response.length > 0 ? response[0] : null
     }
     res.json(data);
   }catch(error){
-    res.status(500).send(error);
+    next(error);
   };
 }
 
-const actualizarServicio = async(req, res) => {
+const actualizarServicio = async(req, res, next) => {
   const {id} = req.params;
   const {nombre, descripcion, categoria, duracion, precio, id_empresa, id_usuario} = req.body;
   try{
@@ -38,22 +38,22 @@ const actualizarServicio = async(req, res) => {
     else
       res.status(200).json({message: `No existe registro con id: ${id}`});
   }catch(error){
-    res.status(500).send(error);
+    next(error);
   };
 }
 
-const agregarServicio = async(req, res) => {
+const agregarServicio = async(req, res, next) => {
   const {nombre, descripcion, categoria, duracion, precio, id_empresa, id_usuario} = req.body;
   try{
     const response = await executeQuery(`insert into servicios (nombre_servicio, descripcion_servicio, categoria_servicio, duracion, precio, id_empresa, id_usuario) VALUES ('${nombre}', '${descripcion}', '${categoria}', ${duracion}, ${precio}, ${id_empresa}, ${id_usuario})`);
     console.log(response);
-    res.status(201).json({message: 'Created'});
+    res.status(201).json({message: 'Created', id: response.insertId});
   }catch(error){
-    res.status(500).send(error);
+    next(error);  
   };
 }
 
-const eliminarServicio = async(req, res) => {
+const eliminarServicio = async(req, res, next) => {
   const {id} = req.params;
   try{
     const response = await executeQuery(`delete from servicios where id_servicio = ${id}`);
@@ -63,8 +63,7 @@ const eliminarServicio = async(req, res) => {
     else
       res.status(200).json({message: `No existe registro con id: ${id}`});
   }catch(error){
-    console.log(error);
-    res.status(500).send(error);
+    next(error);
   }
 }
 
