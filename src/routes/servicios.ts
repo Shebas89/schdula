@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { actualizarServicio, agregarServicio, eliminarServicio, obtenerServicio, obtenerServicios } from "../controller/servicioControllers";
+import { actualizarServicio, agregarServicio, eliminarServicio, obtenerServicio, obtenerServicios, inactivarServicio } from "../controller/servicioControllers";
 
 const serviciosRoutes = (app) => {
   const router = Router();
@@ -10,6 +10,7 @@ const serviciosRoutes = (app) => {
   router.post('/agregarServicio', agregarServicio);
   router.put('/actualizarServicio/:id', actualizarServicio);
   router.delete('/eliminarServicio/:id', eliminarServicio);
+  router.put('/inactivarServicio/:id', inactivarServicio);
 }
 
 export default serviciosRoutes;

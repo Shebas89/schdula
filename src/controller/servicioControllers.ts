@@ -1,8 +1,15 @@
+import { query } from "express";
 import executeQuery from "../services/mysql.services";
 
 const obtenerServicios = async(req, res, next) => {
   try{
-    const response = await executeQuery('select * from servicios');
+    const query = `select s.id_servicio as id, s.nombre_servicio as nombre, s.descripcion_servicio as descripcion, s.categoria_servicio as categoria,
+    s.duracion as duracion, s.precio as precio, e.nombre_empresa as empresa, u.nombre_usuario as empleado from servicios s 
+    inner join usuarios u on s.id_usuario = u.id_usuario 
+    inner join empresas e on s.id_empresa = e.id_empresa 
+    where s.estado_servicio = 'Activo'
+    order by s.id_servicio`
+    const response = await executeQuery(query);
     const data = {
       message: `${response.length} datos encontrados`,
       datos: response.length > 0 ? response : null
@@ -29,9 +36,19 @@ const obtenerServicio = async(req, res, next) => {
 
 const actualizarServicio = async(req, res, next) => {
   const {id} = req.params;
-  const {nombre, descripcion, categoria, duracion, precio, id_empresa, id_usuario} = req.body;
+  const {nombre, descripcion, categoria, duracion, precio, id_empresa, empleado} = req.body;
+  let response_user:any;
   try{
-    const response = await executeQuery(`update servicios set nombre_servicio = '${nombre}', descripcion_servicio = '${descripcion}', categoria_servicio = '${categoria}', duracion = ${duracion}, precio = ${precio}, id_empresa = ${id_empresa}, id_usuario = ${id_usuario} where id_servicio = ${id}`);
+    response_user = await executeQuery(`select id_usuario from usuarios where nombre_usuario = '${empleado}'`);
+    console.log(response_user[0])
+  }catch(error){
+    next(error);
+  };
+  const id_usuario:number = response_user[0].id_usuario;
+  console.log(id_usuario);
+  const query = `update servicios set nombre_servicio = '${nombre}', descripcion_servicio = '${descripcion}', categoria_servicio = '${categoria}', duracion = ${duracion}, precio = ${precio}, id_empresa = ${id_empresa}, id_usuario = ${id_usuario} where id_servicio = ${id}`;
+  try{
+    const response = await executeQuery(query);
     console.log(response);
     if(response.affectedRows > 0)
       res.json({message: 'updated'});
@@ -43,9 +60,20 @@ const actualizarServicio = async(req, res, next) => {
 }
 
 const agregarServicio = async(req, res, next) => {
-  const {nombre, descripcion, categoria, duracion, precio, id_empresa, id_usuario} = req.body;
+  const {nombre, descripcion, categoria, duracion, precio, id_empresa, empleado} = req.body;
+  let response_user:any;
   try{
-    const response = await executeQuery(`insert into servicios (nombre_servicio, descripcion_servicio, categoria_servicio, duracion, precio, id_empresa, id_usuario) VALUES ('${nombre}', '${descripcion}', '${categoria}', ${duracion}, ${precio}, ${id_empresa}, ${id_usuario})`);
+    response_user = await executeQuery(`select id_usuario from usuarios where nombre_usuario = '${empleado}'`);
+    console.log(response_user[0])
+  }catch(error){
+    next(error);
+  };
+  const id_usuario:number = response_user[0].id_usuario;
+  console.log(id_usuario);
+  const query =  `insert into servicios (nombre_servicio, descripcion_servicio, categoria_servicio, duracion, precio, id_empresa, id_usuario, estado_servicio) VALUES ('${nombre}', '${descripcion}', '${categoria}', ${duracion}, ${precio}, ${id_empresa}, ${id_usuario}, 'Activo')`
+  console.log(query);
+  try{
+    const response = await executeQuery(query);
     console.log(response);
     res.status(201).json({message: 'Created', id: response.insertId});
   }catch(error){
@@ -67,4 +95,19 @@ const eliminarServicio = async(req, res, next) => {
   }
 }
 
-export { obtenerServicio, obtenerServicios, actualizarServicio, agregarServicio, eliminarServicio }
+const inactivarServicio = async(req, res, next) => {
+  const {id} = req.params;
+  const {nombre, descripcion, categoria, duracion, precio, id_empresa, id_usuario} = req.body;
+  try{
+    const response = await executeQuery(`update servicios set estado_servicio = 'Inactivo' where id_servicio = ${id}`);
+    console.log(response);
+    if(response.affectedRows > 0)
+      res.json({message: 'deleted'});
+    else
+      res.status(200).json({message: `No existe registro con id: ${id}`});
+  }catch(error){
+    next(error);
+  }
+}
+
+export { obtenerServicio, obtenerServicios, actualizarServicio, agregarServicio, eliminarServicio, inactivarServicio }

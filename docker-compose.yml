@@ -3,6 +3,7 @@ services:
   web:
     build: 
       context: .
+    restart: always
     command: npm run start
     volumes:
       - .:/src
