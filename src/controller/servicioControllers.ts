@@ -1,4 +1,5 @@
 import { query } from "express";
+import { isNamedExportBindings } from "typescript";
 import executeQuery from "../services/mysql.services";
 
 const obtenerServicios = async(req, res, next) => {
@@ -27,6 +28,20 @@ const obtenerServicio = async(req, res, next) => {
     const data = {
       message: `${response.length} dato encontrado`,
       datos: response.length > 0 ? response[0] : null
+    }
+    res.json(data);
+  }catch(error){
+    next(error);
+  };
+}
+
+const obtenerServiciosPorCategoria = async(req, res, next) => {
+  const {categoria} = req.query;
+  try{
+    const response = await executeQuery(`select * from servicios where categoria_servicio = '${categoria}' and estado_servicio = 'Activo'`); 
+    const data = {
+      message: `${response.length} dato encontrado`,
+      datos: response.length > 0 ? response : null
     }
     res.json(data);
   }catch(error){
@@ -110,4 +125,18 @@ const inactivarServicio = async(req, res, next) => {
   }
 }
 
-export { obtenerServicio, obtenerServicios, actualizarServicio, agregarServicio, eliminarServicio, inactivarServicio }
+const obtenerCategoriasServicio = async(req, res, next) => {
+  const query = "select categoria_servicio from servicios where estado_servicio = 'Activo' group by categoria_servicio";
+  try{
+    const response = await executeQuery(query); 
+    const data = {
+      message: `${response.length} dato encontrado`,
+      datos: response.length > 0 ? response : null
+    }
+    res.json(data);
+  }catch(error){
+    next(error);
+  };
+}
+
+export { obtenerServicio, obtenerServicios, actualizarServicio, agregarServicio, eliminarServicio, inactivarServicio, obtenerCategoriasServicio, obtenerServiciosPorCategoria }
