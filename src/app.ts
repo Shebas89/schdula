@@ -2,6 +2,7 @@ import express from 'express';
 import config from './config/config';
 import errorHandler from './middlewares/error';
 import serviciosRoutes from './routes/servicios';
+import usuariosRoutes from "./routes/usuarios" 
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use((_, res, next) => {
 
 // Respuesta del servidor
 serviciosRoutes(app);
+usuariosRoutes(app);
 
 app.use(errorHandler);
 

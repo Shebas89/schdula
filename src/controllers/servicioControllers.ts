@@ -1,6 +1,6 @@
 import { query } from "express";
 import { isNamedExportBindings } from "typescript";
-import executeQuery from "../services/mysql.services";
+import executeQuery from "../services/mysql.service";
 
 const obtenerServicios = async(req, res, next) => {
   try{

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { actualizarServicio, agregarServicio, eliminarServicio, obtenerServicio, obtenerServicios, inactivarServicio, obtenerCategoriasServicio, obtenerServiciosPorCategoria } from "../controller/servicioControllers";
+import { actualizarServicio, agregarServicio, eliminarServicio, obtenerServicio, obtenerServicios, inactivarServicio, obtenerCategoriasServicio, obtenerServiciosPorCategoria } from "../controllers/servicioControllers";
 
 const serviciosRoutes = (app) => {
   const router = Router();
