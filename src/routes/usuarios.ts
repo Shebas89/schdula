@@ -1,7 +1,7 @@
 //DEFINIR LAS RUTAS DE LA APLICACIÓN CON RESPECTO A LA ENTIDAD "usuarios" SEGÚN MOCKUPS
 
 import { Router } from "express";
-import { obtenerUsuario, actualizarUsuario, agregarUsuario, desactivarUsuario, validarUsuario } from "../controllers/usuariosControllers";
+import { obtenerUsuario, actualizarUsuario, agregarUsuario, desactivarUsuario, validarUsuario, iniciarSesion, resetPassword } from "../controllers/usuariosControllers";
 
 //Función: rutas hacia la entidad "usuarios"
 const usuariosRoutes = (app) => {
@@ -23,7 +23,11 @@ const usuariosRoutes = (app) => {
     //5. Mockup: ingresar --> Validar credenciales
     router.get('/validarUsuario', validarUsuario);
 
+    //7. Iniciar Sesion 
+    router.post('/iniciarSesion', iniciarSesion);
+
     //6. Mockup: ingresar --> Recuperar contraseña 
+    router.post('/resetPassword', resetPassword);
 }
 
 

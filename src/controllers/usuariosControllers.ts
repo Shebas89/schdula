@@ -112,6 +112,14 @@ const validarUsuario = async(req, res) => {
     }
 }
 
+const iniciarSesion = async (req, res) => {
+
+} 
+
+const resetPassword = async (req, res) => {
+
+}
+
 
 //Exportar múltiples funciones para ser usadas en el archivo "usuarios.ts"
-export {obtenerUsuario, actualizarUsuario, agregarUsuario, desactivarUsuario, validarUsuario}
+export {obtenerUsuario, actualizarUsuario, agregarUsuario, desactivarUsuario, validarUsuario, iniciarSesion, resetPassword}
